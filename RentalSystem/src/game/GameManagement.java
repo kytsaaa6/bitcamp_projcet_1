@@ -1,4 +1,4 @@
-package rental;
+package game;
 
 public interface GameManagement {
 	

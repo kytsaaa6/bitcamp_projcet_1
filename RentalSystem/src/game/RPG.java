@@ -1,10 +1,10 @@
-package rental;
+package game;
 
-public class Sport extends GameInfo{
+public class RPG extends GameInfo{
 	
 	String type;
 	
-	public Sport(String uniqueNumber,String gameName,String type) {
+	public RPG(String uniqueNumber,String gameName,String type) {
 		super(uniqueNumber,gameName);
 		this.type =type;
 	}
@@ -14,4 +14,5 @@ public class Sport extends GameInfo{
 		
 		
 	}
+	
 }

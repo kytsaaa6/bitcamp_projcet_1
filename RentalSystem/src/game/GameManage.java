@@ -1,8 +1,10 @@
-package rental;
+package game;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import util.Util;
 
 
 public class GameManage implements GameManagement{
@@ -17,13 +19,20 @@ public class GameManage implements GameManagement{
 	private static GameManage m = new GameManage();
 	
 	
-	static GameManage getInstance() {
+	
+	public static GameManage getInstance() {
 		if(m == null) {
 			m = new GameManage();
 		}
 		return m;
 	}
 	 
+	public ArrayList<GameInfo> getGame(){
+		return game;
+	}
+	public ArrayList<GameInfo> getSearchResult(){
+		return searchResult;
+	}
 	
 	String gameList[] = new String[] { "FPS","RPG","Sport"  };
 	int uiqueNumber = 0; 

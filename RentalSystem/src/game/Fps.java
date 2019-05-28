@@ -1,10 +1,10 @@
-package rental;
+package game;
 
-public class RPG extends GameInfo{
+public class Fps extends GameInfo{
 	
 	String type;
 	
-	public RPG(String uniqueNumber,String gameName,String type) {
+	public Fps(String uniqueNumber,String gameName,String type) {
 		super(uniqueNumber,gameName);
 		this.type =type;
 	}
