@@ -58,7 +58,7 @@ public class AccountManager {
         String password = null;
         String name = null;
         String phoneNumber = null;
-        
+        String phoneNumber2 = null;
 
         System.out.println("회원님의 정보를 입력해주세요.");
         System.out.print("ID :");
