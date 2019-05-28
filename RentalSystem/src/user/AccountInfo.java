@@ -19,7 +19,7 @@ public class AccountInfo implements Account {
     public ArrayList<Object> getinfo(){
     	return info;
     }
-	
+    
 	// 일반회원용 생성자
 	AccountInfo(String id, String password, String name, String phoneNumber) {
 		this.id = id;

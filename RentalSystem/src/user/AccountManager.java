@@ -6,9 +6,7 @@ import util.Util;
 
 public class AccountManager {
 	
-	
 
-	
     private ArrayList<AccountInfo> members;
     
     //로그인 중인 아이디 저장 변수 추가
@@ -27,7 +25,7 @@ public class AccountManager {
     	members.add(new AccountInfo("admin","admin","abcd@abcd","1111"));
     }
     
-    public static AccountManager m = new AccountManager();    
+    private static AccountManager m = new AccountManager();    
     
     
     public static AccountManager getInstance() {
@@ -37,7 +35,8 @@ public class AccountManager {
     	return m;
     }
     
-    
+    AccountValidateCheck vaild = new AccountValidateCheck();
+
     // 관리자 계정
 //    public AccountManager() {
 //    	members.add(new AccountInfo("admin","admin","abcd@abcd","1111"));
@@ -88,71 +87,54 @@ public class AccountManager {
         String name = null;
         String phoneNumber = null;
         
-
-        System.out.println("회원님의 정보를 입력해주세요.");
-        System.out.print("ID :");
-        id = Util.keyboard.nextLine();
-        // ID 길이가 5자 미만일 경우
-        if(id.length()<5) {
-        	System.out.println("5자 이상 입력해주세요.");
-        	createAccount();
-        }
-  
         while(true) {
-        System.out.print("PW :");
-        password = Util.keyboard.nextLine();
+            System.out.println("회원님의 정보를 입력해주세요.");
+            System.out.print("ID :");
+            id = Util.keyboard.nextLine();
+            
+            // ID 중복 체크
+            if(vaild.IdCheck(id) != null){
+                System.out.println("이미 등록된 ID 입니다.");
+                continue;
+            }
+            // ID 길이 체크
+            else if(vaild.checkID(id) == 0) {
+            	System.out.println("5자 이상 입력해주세요.");
+            	continue;
+            }
 
-            if(checkPassword(password) == 1) {
+            System.out.print("PW :");
+            password = Util.keyboard.nextLine();
+
+            // PW 길이 체크
+            if(vaild.checkPassword(password) == 1) {
             	System.out.println("9자 이상 입력해주세요.");
             	continue;
             }
-            else if(checkPassword(password) != 3) {
+            
+            // PW 조합 체크
+            else if(vaild.checkPassword(password) != 3) {
             	System.out.println("특수문자 혹은 영어 대문자를 포함해 주세요");
-            	continue;
+            	continue;	
             }
+            
+            System.out.print("NAME :");
+            name = Util.keyboard.nextLine();
+            
+            System.out.print("Phone :");
+            phoneNumber = Util.keyboard.nextLine();
+            //사용자로부터 입력받은 데이터로 인스턴스 생성(객체의 변수에 저장)
+            
+            System.out.println("회원가입이 완료 되었습니다.");
+            members.add(new AccountInfo(id, password, name, phoneNumber));
+            
             break;
+            
         }
         
-        System.out.print("NAME :");
-        name = Util.keyboard.nextLine();
-        
-        System.out.print("Phone :");
-        phoneNumber = Util.keyboard.nextLine();
-        //사용자로부터 입력받은 데이터로 인스턴스 생성(객체의 변수에 저장)
-        
-        System.out.println("회원가입이 완료 되었습니다.");
-        members.add(new AccountInfo(id, password, name, phoneNumber));
-        
 	}
 	
-	// 패스워드 조합 규칙
-	int checkPassword(String password) {
-		
-		int isCheck = 1;
-		char[] ch = password.toCharArray();
-		
-		// 패스워드 9자 이상
-		if (password.length()>=9) {
-			// 패스워드 대문자 포함여부 확인
-			for(int i=0; i<ch.length; i++) {
-				if(ch[i] >= 65 && ch[i] <= 90) {
-					isCheck = 2;
-				}
-			}
-			// 패스워드 특수문자 포함여부 확인
-			for(int i=0; i<ch.length; i++) {
-				if (ch[i] >= 33 && ch[i] <= 47) {
-					isCheck = 3;
-				}	
-			}
-		} else 
-				isCheck = 1;
-		
-		return isCheck;
-	}
-	
-	
-    // 로그인
+    // 로그인 메서드
     void accountLogin() {
         //현재 입력 스캐너의 버퍼를 삭제
         Util.keyboard.nextLine();
@@ -161,20 +143,22 @@ public class AccountManager {
         String password = null;
         
         System.out.println("로그인 정보를 입력해주세요.");
+        
         while(true) {        
+        	
             System.out.print("ID :");
             id = Util.keyboard.nextLine();
             
             System.out.print("PW :");
             password = Util.keyboard.nextLine();
 
-            AccountInfo member = IdCheck(id);
-            
-            if(member == null){
+            // ID 일치여부 확인
+            if(vaild.IdCheck(id) == null){
                 System.out.println("등록되지 않은 ID입니다.");
                 continue;
-            }else if(member.getPW().equals(password)) {
-                System.out.println("[" + member.getID() + "]님께서 로그인 하셨습니다.");
+            // 저장된 PW 와 입력한 PW 비교
+            }else if(vaild.IdCheck(id).getPW().equals(password)) {
+                System.out.println("[" + vaild.IdCheck(id).getID() + "]님께서 로그인 하셨습니다.");
                 loginId = id;
             }else {
                 System.out.println("비밀번호가 틀렸습니다.");
@@ -183,20 +167,12 @@ public class AccountManager {
             break;
         }
     }
-	
-    // 로그인 ID 체크(참조형 타입)
-    AccountInfo IdCheck(String id) {
-        for(AccountInfo idcheck : members) {
-            if(idcheck.getID().equals(id)) {
-                return idcheck;
-            }
-        }
-        return null;
-    }
+    
     
 	// 회원정보 수정
 	void updateAccount() {
 	}
+	
 	
 	// 회원정보 삭제
 	void deleteAccount() {
@@ -205,9 +181,8 @@ public class AccountManager {
         System.out.println("삭제하실 회원님의 ID을 입력하세요. :");
         String id = Util.keyboard.nextLine();
         
-        AccountInfo member = IdCheck(id);
-
-        if(member==null) {
+        // ID 일치여부 확인
+        if(vaild.IdCheck(id)==null) {
         	System.out.println("등록되지 않은 ID입니다.");
         }
         
@@ -227,17 +202,18 @@ public class AccountManager {
         Util.keyboard.nextLine();
         System.out.println("검색하실 회원님의 ID을 입력하세요. ");
         String id = Util.keyboard.nextLine();
+            
+        AccountInfo search = vaild.IdCheck(id);
         
-        AccountInfo member = IdCheck(id);
-        
-        if(member == null){
+        // ID 일치여부 확인
+        if(search == null){
             System.out.println("등록된 ID가 없습니다.");
         } else {
         System.out.println("[회원정보 안내]");
-        System.out.println("ID : "+ member.getID());
-        System.out.println("PW : "+ member.getPW());
-        System.out.println("NAME : "+ member.getName());
-        System.out.println("Phone : "+ member.getPhoneNumber());
+        System.out.println("ID : "+ search.getID());
+        System.out.println("PW : "+ search.getPW());
+        System.out.println("NAME : "+ search.getName());
+        System.out.println("Phone : "+ search.getPhoneNumber());
 	
         }
 	}
@@ -247,6 +223,8 @@ public class AccountManager {
 		for(AccountInfo info : members) {
 			System.out.println("ID : "+info.getID()+"\tPW : "+info.getPW()+"\tNAME : "+info.getName()+"\tPhone : "+info.getPhoneNumber());
 		}
+		
+		
 //		for(int i=0; i<members.size(); i++) {
 //			System.out.println("ID :"+ members.get(i).getID());
 //		}
