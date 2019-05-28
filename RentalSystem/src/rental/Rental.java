@@ -201,18 +201,18 @@ public class Rental implements RentalInterface{
 
 		if(account.getMembers().get(userindex).getinfo().get(selectNumber) instanceof GameInfo) {
 			
-			rentalGameInfo.get(account.getMembers().remove(userindex).getinfo().get(selectNumber));
 			
 			for(int i = 0; i< game.getGame().size(); i++) {
 				if(account.getMembers().get(userindex).getinfo().get(selectNumber).equals( game.getGame().get(i)) ) {
 					 game.getGame().get(i).rental = "대여 가능";
 				}
 			}
-			
+			rentalGameInfo.remove(account.getMembers().get(userindex).getinfo().get(selectNumber));
+
 			
 		}else if(account.getMembers().get(userindex).getinfo().get(selectNumber) instanceof BookInfo) {
 			
-			rentalBookInfo.get(account.getMembers().remove(userindex).getinfo().get(selectNumber));
+			
 
 			
 			for(int i = 0; i<book.getBook().size(); i++) {
@@ -220,16 +220,19 @@ public class Rental implements RentalInterface{
 					book.getBook().get(i).rental = "대여 가능";
 				}
 			}
+			rentalBookInfo.remove(account.getMembers().get(userindex).getinfo().get(selectNumber));
 			
 		}else if(account.getMembers().get(userindex).getinfo().get(selectNumber) instanceof DvdInfo) {
 			
-			rentalDVDInfo.get(account.getMembers().remove(userindex).getinfo().get(selectNumber));
 
 			for(int i = 0; i< dvd.getDvd().size(); i++) {
 				if(account.getMembers().get(userindex).getinfo().get(selectNumber).equals( dvd.getDvd().get(i)) ) {
 					dvd.getDvd().get(i).rental = "대여 가능";
 				}
 			}
+			
+			rentalDVDInfo.remove(account.getMembers().get(userindex).getinfo().get(selectNumber));
+
 		}
 		
 		account.getMembers().get(userindex).getinfo().remove(selectNumber);
@@ -250,14 +253,14 @@ public class Rental implements RentalInterface{
 					System.out.println("======["+k+"]======");
 					account.getMembers().get(userindex).getinfo().get(k).toString();
 					if(account.getMembers().get(userindex).getinfo().get(k) instanceof GameInfo) {
-						System.out.println(rentalGameInfo.get(account.getMembers().get(userindex).getinfo().get(k))[0]);
-						System.out.println(rentalGameInfo.get(account.getMembers().get(userindex).getinfo().get(k))[1]);						
+						System.out.println("대여자 ID: "+rentalGameInfo.get(account.getMembers().get(userindex).getinfo().get(k))[0]);
+						System.out.println("대여일: "+rentalGameInfo.get(account.getMembers().get(userindex).getinfo().get(k))[1]);						
 					}else if(account.getMembers().get(userindex).getinfo().get(k) instanceof BookInfo) {
-						System.out.println(rentalBookInfo.get(account.getMembers().get(userindex).getinfo().get(k))[0]);
-						System.out.println(rentalBookInfo.get(account.getMembers().get(userindex).getinfo().get(k))[1]);			
+						System.out.println("대여자 ID: "+rentalBookInfo.get(account.getMembers().get(userindex).getinfo().get(k))[0]);
+						System.out.println("대여일: "+rentalBookInfo.get(account.getMembers().get(userindex).getinfo().get(k))[1]);			
 					}else if(account.getMembers().get(userindex).getinfo().get(k) instanceof DvdInfo) {
-						System.out.println(rentalDVDInfo.get(account.getMembers().get(userindex).getinfo().get(k))[0]);
-						System.out.println(rentalDVDInfo.get(account.getMembers().get(userindex).getinfo().get(k))[1]);			
+						System.out.println("대여자 ID: "+rentalDVDInfo.get(account.getMembers().get(userindex).getinfo().get(k))[0]);
+						System.out.println("대여일: "+rentalDVDInfo.get(account.getMembers().get(userindex).getinfo().get(k))[1]);			
 					}
 					
 					System.out.println("=================");
